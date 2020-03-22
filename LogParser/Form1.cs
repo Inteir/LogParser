@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace LogParser
 {
@@ -78,7 +79,44 @@ namespace LogParser
 
         private void button3_Click(object sender, EventArgs e)
         {
+            processFile(path);
+        }
 
+        private void processFile(String filePath)
+        {
+            var lines = File.ReadAllLines(filePath);
+            for (var i = 0; i < lines.Length; i += 1)
+            {
+                var line = lines[i];
+                // Process line
+                if (radioButton1.Checked)
+                {
+                    if (line.Contains("ERROR"))
+                    {
+                        printLine(line);
+                    }
+                }
+                if (radioButton2.Checked)
+                {
+                    if (line.Contains(textBox1.Text))
+                    {
+                        printLine(line);
+                    }
+                }
+                if (radioButton3.Checked)
+                {
+                    if (Regex.Matches(line, textBox2.Text, RegexOptions.IgnoreCase).Count > 0)
+                    {
+                        printLine(line);
+                    }
+                }
+            }
+        }
+
+        private void printLine(String line)
+        {
+           richTextBox1.AppendText("\r\n" + line);
+            richTextBox1.ScrollToCaret();
         }
     }
 }

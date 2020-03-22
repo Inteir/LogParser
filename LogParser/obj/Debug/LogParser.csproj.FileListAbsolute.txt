@@ -8,3 +8,13 @@ E:\Inteir\LogParser\solution\LogParser\LogParser\obj\Debug\LogParser.csproj.Core
 E:\Inteir\LogParser\solution\LogParser\LogParser\obj\Debug\LogParser.exe
 E:\Inteir\LogParser\solution\LogParser\LogParser\obj\Debug\LogParser.pdb
 E:\Inteir\LogParser\solution\LogParser\LogParser\obj\Debug\LogParser.Form1.resources
+E:\Inteir\LogParser\LogParser\LogParser\bin\Debug\LogParser.exe.config
+E:\Inteir\LogParser\LogParser\LogParser\bin\Debug\LogParser.exe
+E:\Inteir\LogParser\LogParser\LogParser\bin\Debug\LogParser.pdb
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.csprojAssemblyReference.cache
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.Form1.resources
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.Properties.Resources.resources
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.csproj.GenerateResource.cache
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.csproj.CoreCompileInputs.cache
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.exe
+E:\Inteir\LogParser\LogParser\LogParser\obj\Debug\LogParser.pdb
