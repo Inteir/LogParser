@@ -44,7 +44,7 @@ namespace LogParser
                     folder = true;
                     path = fbd.SelectedPath;
                     label4.Text = path;
-                   // string[] files = Directory.GetFiles(fbd.SelectedPath);
+                   // 
 
                   //  System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
                 }
@@ -79,7 +79,23 @@ namespace LogParser
 
         private void button3_Click(object sender, EventArgs e)
         {
-            processFile(path);
+            richTextBox1.Clear();
+            if (folder)
+            {
+                string[] files = Directory.GetFiles(path);
+                for (int i = 0; i <files.Length; i++)
+                {
+                    if (files[i].ToLower().Contains(".log"))
+                    {
+                        processFile(files[i]);
+                    }
+                }
+            }
+            else
+            {
+                processFile(path);
+            }
+           
         }
 
         private void processFile(String filePath)
@@ -91,7 +107,7 @@ namespace LogParser
                 // Process line
                 if (radioButton1.Checked)
                 {
-                    if (line.Contains("ERROR"))
+                    if (line.ToLower().Contains("error"))
                     {
                         printLine(line);
                     }
@@ -117,6 +133,7 @@ namespace LogParser
         {
            richTextBox1.AppendText("\r\n" + line);
             richTextBox1.ScrollToCaret();
+            //
         }
     }
 }
