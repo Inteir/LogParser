@@ -29,8 +29,8 @@ namespace LogParser
 
         }
 
-        String path = "C:\\1\test log.log";
-        Boolean folder = false;
+        String path = "C:\\1";
+        Boolean folder = true;
         
 
         private void button1_Click(object sender, EventArgs e)
@@ -80,6 +80,8 @@ namespace LogParser
         private void button3_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
+            new StreamWriter("ERRORSreport.txt", false);
+            
             if (folder)
             {
                 string[] files = Directory.GetFiles(path);
@@ -87,6 +89,7 @@ namespace LogParser
                 {
                     if (files[i].ToLower().Contains(".log"))
                     {
+                        printLine("processing " + files[i]);
                         processFile(files[i]);
                     }
                 }
@@ -131,9 +134,13 @@ namespace LogParser
 
         private void printLine(String line)
         {
-           richTextBox1.AppendText("\r\n" + line);
+            richTextBox1.AppendText("\r\n" + line);
             richTextBox1.ScrollToCaret();
-            //
+
+            using (StreamWriter writetext = new StreamWriter("ERRORSreport.txt", true))
+            {
+                writetext.WriteLine(line);
+            }
         }
     }
 }
