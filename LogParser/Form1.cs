@@ -18,24 +18,14 @@ namespace LogParser
         {
             InitializeComponent();
         }
-
-        private void radioButton3_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         String path = "C:\\1";
         Boolean folder = true;
         
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (var fbd = new FolderBrowserDialog())
+            using (FolderBrowserDialog fbd = new FolderBrowserDialog())
             {
                 DialogResult result = fbd.ShowDialog();
 
@@ -44,9 +34,7 @@ namespace LogParser
                     folder = true;
                     path = fbd.SelectedPath;
                     label4.Text = path;
-                   // 
-
-                  //  System.Windows.Forms.MessageBox.Show("Files found: " + files.Length.ToString(), "Message");
+                    // 
                 }
             }
 
@@ -72,30 +60,39 @@ namespace LogParser
 
         }
 
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             richTextBox1.Clear();
-            new StreamWriter("ERRORSreport.txt", false);
-            
+            StreamWriter writetext = new StreamWriter("ERRORSreport.txt", false);
+            writetext.Close();
+
             if (folder)
             {
                 string[] files = Directory.GetFiles(path);
+                int logFilesCount = 0;
+                for (int i = 0; i < files.Length; i++)
+                {
+                    if (files[i].ToLower().Contains(".log"))
+                    {
+                        logFilesCount++;
+                    }
+                }
+
+                int j = 0;
                 for (int i = 0; i <files.Length; i++)
                 {
                     if (files[i].ToLower().Contains(".log"))
                     {
+                        j++;
                         printLine("processing " + files[i]);
+                        label1.Text = j + " / " + logFilesCount;
                         processFile(files[i]);
                     }
                 }
             }
             else
             {
+                label1.Text = "";
                 processFile(path);
             }
            
@@ -103,10 +100,13 @@ namespace LogParser
 
         private void processFile(String filePath)
         {
-            var lines = File.ReadAllLines(filePath);
-            for (var i = 0; i < lines.Length; i += 1)
+            string[] lines = File.ReadAllLines(filePath);
+            progressBar1.Maximum = lines.Length;
+            progressBar1.Value = 0;
+            for (int i = 0; i < lines.Length; i++)
             {
-                var line = lines[i];
+                progressBar1.Value += 1;
+                string line = lines[i];
                 // Process line
                 if (radioButton1.Checked)
                 {
