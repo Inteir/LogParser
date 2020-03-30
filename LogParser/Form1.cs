@@ -18,10 +18,43 @@ namespace LogParser
         {
             InitializeComponent();
         }
-        
-        String path = "C:\\1";
-        Boolean folder = true;
-        
+
+        String path = "";
+        Boolean isFolder = false;
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            //<exe name> <path> <mode{0,1,2}> <optional string>
+            //LogParser.exe c:\\1 1 error
+            if (args.Length >= 3)
+            {
+                //args[0] is exe path
+                path = args[1];
+                label4.Text = path;
+
+                int mode = Int16.Parse(args[2]);
+                if (mode == 0)
+                {
+                    radioButton1.Checked = true;
+                }
+                else if (mode == 1)
+                {
+                    radioButton2.Checked = true;
+                    textBox1.Text = args[3];
+                }
+                else if (mode == 2)
+                {
+                    radioButton3.Checked = true;
+                    textBox2.Text = args[3];
+                } else
+                {
+                    return;
+                }
+
+                button3_Click(null, null);
+            }
+        }
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -31,13 +64,11 @@ namespace LogParser
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath))
                 {
-                    folder = true;
+                    isFolder = true;
                     path = fbd.SelectedPath;
                     label4.Text = path;
-                    // 
                 }
             }
-
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -45,17 +76,15 @@ namespace LogParser
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
 
             openFileDialog1.InitialDirectory = "c:\\";
-            openFileDialog1.Filter = "Log files (*.log)|*.log";
+            openFileDialog1.Filter = "All files (*.*)|*.*";
             openFileDialog1.FilterIndex = 0;
             openFileDialog1.RestoreDirectory = true;
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                folder = false;
-                string selectedFileName = openFileDialog1.FileName;
-                path = selectedFileName;
+                isFolder = false;
+                path = openFileDialog1.FileName;
                 label4.Text = path;
-                //...
             }
 
         }
@@ -66,28 +95,17 @@ namespace LogParser
             StreamWriter writetext = new StreamWriter("ERRORSreport.txt", false);
             writetext.Close();
 
-            if (folder)
+            if (isFolder || Directory.Exists(path))
             {
                 string[] files = Directory.GetFiles(path);
-                int logFilesCount = 0;
-                for (int i = 0; i < files.Length; i++)
-                {
-                    if (files[i].ToLower().Contains(".log"))
-                    {
-                        logFilesCount++;
-                    }
-                }
 
-                int j = 0;
-                for (int i = 0; i <files.Length; i++)
+                int i = 0;
+                foreach (string file in files)
                 {
-                    if (files[i].ToLower().Contains(".log"))
-                    {
-                        j++;
-                        printLine("processing " + files[i]);
-                        label1.Text = j + " / " + logFilesCount;
-                        processFile(files[i]);
-                    }
+                    printLine("processing " + file);
+                    label1.Text = (i + 1) + " / " + files.Length;
+                    processFile(files[i]);
+                    i++;
                 }
             }
             else
@@ -95,7 +113,6 @@ namespace LogParser
                 label1.Text = "";
                 processFile(path);
             }
-           
         }
 
         private void processFile(String filePath)
@@ -103,11 +120,10 @@ namespace LogParser
             string[] lines = File.ReadAllLines(filePath);
             progressBar1.Maximum = lines.Length;
             progressBar1.Value = 0;
-            for (int i = 0; i < lines.Length; i++)
+            foreach(string line in lines)
             {
                 progressBar1.Value += 1;
-                string line = lines[i];
-                // Process line
+
                 if (radioButton1.Checked)
                 {
                     if (line.ToLower().Contains("error"))
